@@ -18,7 +18,6 @@
   --radius-md: 18px;
   --max-width: 1280px;
   --hero-scale: 1;
-  --travel-progress: 0%;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --step--1: 0.82rem;
   --step-0: 0.95rem;
@@ -613,7 +612,7 @@ main,
 }
 
 .hero h1,
-.mountain-main-title {
+.portfolio-main-title {
   margin: 0;
   font-size: var(--step-5);
   font-weight: 800;
@@ -644,9 +643,8 @@ main,
 .hero-text,
 .section-heading p,
 .profile-bio,
-.mountain-step p,
+.portfolio-step p,
 .bento-caption,
-.travel-card p,
 .film-meta,
 .film-copy,
 .site-footer {
@@ -857,7 +855,6 @@ main,
 .preview-tile:hover .preview-image,
 .film-link:hover .film-image,
 .bento-tile:hover .bento-image,
-.travel-card:hover .travel-image,
 .texture-card:hover img {
   transform: scale(1.04);
 }
@@ -929,19 +926,19 @@ main,
   text-transform: uppercase;
 }
 
-.mountain-layout {
+.portfolio-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
   gap: 1.2rem;
   margin-top: 1.6rem;
 }
 
-.mountain-steps {
+.portfolio-steps {
   display: grid;
   gap: 0.95rem;
 }
 
-.mountain-step {
+.portfolio-step {
   padding: 1.2rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 22px;
@@ -952,13 +949,13 @@ main,
     background 220ms ease;
 }
 
-.mountain-step.is-active {
+.portfolio-step.is-active {
   border-color: rgba(255, 198, 109, 0.42);
   background: rgba(255, 255, 255, 0.08);
   transform: translateX(10px);
 }
 
-.mountain-step-index {
+.portfolio-step-index {
   color: var(--accent-soft);
   font-size: 0.72rem;
   font-weight: 700;
@@ -966,7 +963,7 @@ main,
   text-transform: uppercase;
 }
 
-.mountain-step h3 {
+.portfolio-step h3 {
   margin: 0.55rem 0 0;
   font-size: var(--step-2);
   line-height: 1.1;
@@ -974,22 +971,31 @@ main,
   letter-spacing: -0.03em;
 }
 
-.mountain-step p {
+.portfolio-step p {
   margin: 0.7rem 0 0;
   font-size: var(--step-0);
   line-height: 1.68;
 }
 
-.mountain-stage {
+.portfolio-step-thumb {
+  display: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 0.75rem;
+}
+
+.portfolio-stage {
   position: relative;
 }
 
-.mountain-stage-sticky {
+.portfolio-stage-sticky {
   position: sticky;
   top: 5.7rem;
 }
 
-.mountain-visual {
+.portfolio-visual {
   position: relative;
   overflow: hidden;
   min-height: 34rem;
@@ -999,16 +1005,17 @@ main,
   box-shadow: var(--shadow);
 }
 
-.mountain-main-image {
+.portfolio-main-image {
+  display: block;
   width: 100%;
   height: 100%;
   min-height: 34rem;
   object-fit: cover;
-  transform: scale(var(--mountain-depth, 1));
+  transform: scale(var(--portfolio-depth, 1));
   transition: transform 120ms linear;
 }
 
-.mountain-visual-overlay {
+.portfolio-visual-overlay {
   position: absolute;
   inset: auto 1.25rem 1.25rem 1.25rem;
   padding: 1rem 1.1rem;
@@ -1017,7 +1024,7 @@ main,
   backdrop-filter: blur(10px);
 }
 
-.mountain-main-kicker {
+.portfolio-main-kicker {
   margin: 0;
   color: var(--accent-soft);
   font-size: 0.72rem;
@@ -1026,7 +1033,7 @@ main,
   text-transform: uppercase;
 }
 
-.mountain-main-title {
+.portfolio-main-title {
   margin-top: 0.45rem;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
 }
@@ -1057,11 +1064,11 @@ main,
   transition: transform 220ms ease;
 }
 
-.street-section {
+.gallery-section {
   padding-top: 4rem;
 }
 
-.street-bento {
+.gallery-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 1rem;
@@ -1083,7 +1090,7 @@ main,
   transition-delay: var(--delay, 0ms);
 }
 
-.street-bento.is-visible .bento-tile {
+.gallery-grid.is-visible .bento-tile {
   opacity: 1;
   transform: translateY(var(--tile-lift, 0px)) scale(var(--tile-scale, 1));
 }
@@ -1141,95 +1148,6 @@ main,
   margin: 0.5rem 0 0;
   font-size: var(--step-0);
   line-height: 1.58;
-}
-
-.travel-section {
-  padding-top: 4rem;
-}
-
-.travel-story {
-  position: relative;
-  margin-top: 1.5rem;
-  padding-left: 3rem;
-}
-
-.travel-line {
-  position: absolute;
-  top: 0;
-  left: 1rem;
-  width: 2px;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.travel-line-progress {
-  width: 100%;
-  height: var(--travel-progress);
-  background: linear-gradient(180deg, var(--accent), var(--teal));
-  box-shadow: 0 0 24px rgba(109, 213, 197, 0.24);
-  transition: height 160ms linear;
-}
-
-.travel-cards {
-  display: grid;
-  gap: 1.1rem;
-}
-
-.travel-card {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 1rem;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
-  transform: translateZ(0);
-}
-
-.travel-card:nth-child(even) {
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-}
-
-.travel-card:nth-child(even) .travel-image-wrap {
-  order: 2;
-}
-
-.travel-image-wrap {
-  overflow: hidden;
-  min-height: 16rem;
-  border-radius: 18px;
-}
-
-.travel-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(var(--travel-image-scale, 1));
-  transition: transform 240ms ease;
-}
-
-.travel-card-meta {
-  margin: 0;
-  color: var(--accent-soft);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.travel-card h3 {
-  margin: 0.45rem 0 0;
-  font-size: var(--step-3);
-  line-height: 1.08;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-}
-
-.travel-card p {
-  margin: 0.65rem 0 0;
-  font-size: var(--step-0);
-  line-height: 1.68;
 }
 
 .reel-section {
@@ -1324,6 +1242,66 @@ main,
   letter-spacing: -0.025em;
 }
 
+.services-section {
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.8rem;
+}
+
+.service-card {
+  padding: 1.6rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  transition:
+    background 260ms ease,
+    border-color 260ms ease,
+    transform 260ms ease;
+}
+
+.service-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 122, 47, 0.28);
+  transform: translateY(-4px);
+}
+
+.service-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.service-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.service-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.services-cta {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.services-cta p {
+  margin: 0 0 1.2rem;
+  font-size: 1.08rem;
+  color: var(--muted);
+}
+
 .contact-section {
   padding-top: 4rem;
   padding-bottom: 3rem;
@@ -1374,22 +1352,32 @@ main,
 
 @media (max-width: 1100px) {
   .hero-grid,
-  .mountain-layout,
-  .travel-card,
-  .travel-card:nth-child(even) {
+  .portfolio-layout {
     grid-template-columns: 1fr;
+  }
+
+  .portfolio-stage {
+    display: none;
+  }
+
+  .portfolio-step-thumb {
+    display: block;
+  }
+
+  .portfolio-step.is-active {
+    transform: none;
   }
 
   .profile-card {
     max-width: 34rem;
   }
 
-  .travel-card:nth-child(even) .travel-image-wrap {
-    order: initial;
+  .gallery-grid,
+  .latest-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .street-bento,
-  .latest-strip {
+  .services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1469,19 +1457,22 @@ main,
   .hero-metrics,
   .contact-grid,
   .preview-grid,
-  .texture-strip,
   .latest-strip,
-  .street-bento {
+  .gallery-grid,
+  .services-grid {
     grid-template-columns: 1fr;
   }
 
-  .texture-card,
-  .texture-card-large {
-    min-height: 8rem;
+  .portfolio-step-thumb {
+    aspect-ratio: 3 / 2;
+    border-radius: 12px;
   }
 
-  .travel-story {
-    padding-left: 2rem;
+  .portfolio-step p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
@@ -1492,8 +1483,7 @@ main,
   .bento-tile,
   .button,
   .hero-backdrop-image,
-  .mountain-main-image,
-  .travel-image,
+  .portfolio-main-image,
   .preview-image,
   .film-image {
     animation: none !important;

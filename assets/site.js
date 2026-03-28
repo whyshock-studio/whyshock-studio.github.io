@@ -1,20 +1,17 @@
-const streetBento = document.querySelector("#street-bento");
-const travelCards = document.querySelector("#travel-cards");
+const galleryGrid = document.querySelector("#gallery-grid");
 const latestStrip = document.querySelector("#latest-strip");
 const feedStatus = document.querySelector("#feed-status");
 const filmCardTemplate = document.querySelector("#film-card-template");
 
-const mountainSteps = document.querySelector("#mountain-steps");
-const mountainMainImage = document.querySelector("#mountain-main-image");
-const mountainMainKicker = document.querySelector("#mountain-main-kicker");
-const mountainMainTitle = document.querySelector("#mountain-main-title");
+const portfolioSteps = document.querySelector("#portfolio-steps");
+const portfolioMainImage = document.querySelector("#portfolio-main-image");
+const portfolioMainKicker = document.querySelector("#portfolio-main-kicker");
+const portfolioMainTitle = document.querySelector("#portfolio-main-title");
 const textureImage1 = document.querySelector("#texture-image-1");
 const textureImage2 = document.querySelector("#texture-image-2");
 const textureImage3 = document.querySelector("#texture-image-3");
 
 const heroBackdropImage = document.querySelector("#hero-backdrop-image");
-const travelLineProgress = document.querySelector("#travel-line-progress");
-const travelStory = document.querySelector("#travel-story");
 const siteHeader = document.querySelector(".site-header");
 const cameraLoader = document.querySelector("#camera-loader");
 const flashWash = document.querySelector("#flash-wash");
@@ -23,8 +20,8 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 
 const numberFormatter = new Intl.NumberFormat("en", { notation: "compact" });
 
-let mountainStepElements = [];
-let currentMountainIndex = 0;
+let portfolioStepElements = [];
+let currentPortfolioIndex = 0;
 let cameraCueCooldownUntil = 0;
 let cameraCueTimers = [];
 let flashWashTimer = null;
@@ -78,9 +75,8 @@ function selectPostGroups(posts) {
 
   return {
     hero: take(1)[0] || null,
-    mountains: take(3),
-    street: take(3),
-    travel: take(3),
+    portfolio: take(3),
+    gallery: take(3),
     latest: take(remainingPosts.length),
   };
 }
@@ -111,80 +107,86 @@ function renderHero(post) {
   heroBackdropImage.alt = post.alt || buildTitle(post);
 }
 
-function updateMountainVisual(posts, index) {
+function updatePortfolioVisual(posts, index) {
   if (!posts.length) return;
 
-  currentMountainIndex = index;
+  currentPortfolioIndex = index;
   const active = posts[index];
   const next = posts[(index + 1) % posts.length];
   const nextTwo = posts[(index + 2) % posts.length];
 
-  mountainMainImage.src = imageFor(active);
-  mountainMainImage.alt = active.alt || buildTitle(active);
-  mountainMainKicker.textContent = `${formatDate(active.taken_at)} | PUBLIC ARCHIVE | ${active.type || "PHOTO"}`;
-  mountainMainTitle.textContent = buildTitle(active);
+  portfolioMainImage.src = imageFor(active);
+  portfolioMainImage.alt = active.alt || buildTitle(active);
+  portfolioMainKicker.textContent = `${formatDate(active.taken_at)} | PUBLIC ARCHIVE | ${active.type || "PHOTO"}`;
+  portfolioMainTitle.textContent = buildTitle(active);
 
   textureImage1.src = imageFor(active);
   textureImage2.src = imageFor(next);
   textureImage3.src = imageFor(nextTwo);
 
-  mountainStepElements.forEach((step, stepIndex) => {
+  portfolioStepElements.forEach((step, stepIndex) => {
     step.classList.toggle("is-active", stepIndex === index);
   });
 }
 
-function renderMountainScenes(posts) {
-  if (!mountainSteps || !posts.length) return;
+function renderPortfolioCards(posts) {
+  if (!portfolioSteps || !posts.length) return;
 
-  mountainSteps.innerHTML = "";
+  portfolioSteps.innerHTML = "";
 
   posts.forEach((post, index) => {
     const card = document.createElement("article");
+    const thumb = document.createElement("img");
     const rect = document.createElement("div");
     const title = document.createElement("h3");
     const copy = document.createElement("p");
 
-    card.className = "mountain-step";
+    card.className = "portfolio-step";
     card.dataset.index = String(index);
 
-    rect.className = "mountain-step-index";
-    rect.textContent = `Scene 0${index + 1}`;
+    thumb.className = "portfolio-step-thumb";
+    thumb.src = imageFor(post);
+    thumb.alt = post.alt || buildTitle(post);
+    thumb.loading = "lazy";
+
+    rect.className = "portfolio-step-index";
+    rect.textContent = `Shot 0${index + 1}`;
 
     title.textContent = buildTitle(post);
     copy.textContent = truncate(post.caption, 170);
 
-    card.append(rect, title, copy);
-    mountainSteps.append(card);
+    card.append(thumb, rect, title, copy);
+    portfolioSteps.append(card);
   });
 
-  mountainStepElements = Array.from(mountainSteps.querySelectorAll(".mountain-step"));
+  portfolioStepElements = Array.from(portfolioSteps.querySelectorAll(".portfolio-step"));
 
-  mountainStepElements.forEach((step, index) => {
-    step.addEventListener("mouseenter", () => updateMountainVisual(posts, index));
-    step.addEventListener("click", () => updateMountainVisual(posts, index));
+  portfolioStepElements.forEach((step, index) => {
+    step.addEventListener("mouseenter", () => updatePortfolioVisual(posts, index));
+    step.addEventListener("click", () => updatePortfolioVisual(posts, index));
   });
 
-  updateMountainVisual(posts, 0);
+  updatePortfolioVisual(posts, 0);
 
-  const mountainObserver = new IntersectionObserver(
+  const portfolioObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const index = Number(entry.target.dataset.index || 0);
-          updateMountainVisual(posts, index);
+          updatePortfolioVisual(posts, index);
         }
       });
     },
     { threshold: 0.6 }
   );
 
-  mountainStepElements.forEach((step) => mountainObserver.observe(step));
+  portfolioStepElements.forEach((step) => portfolioObserver.observe(step));
 }
 
-function renderStreetBento(posts) {
-  if (!streetBento) return;
+function renderGalleryGrid(posts) {
+  if (!galleryGrid) return;
 
-  streetBento.innerHTML = "";
+  galleryGrid.innerHTML = "";
 
   posts.forEach((post, index) => {
     const link = document.createElement("a");
@@ -207,7 +209,7 @@ function renderStreetBento(posts) {
 
     copy.className = "bento-copy";
     meta.className = "bento-meta";
-    meta.textContent = `${formatDate(post.taken_at)} | STREET FRAME`;
+    meta.textContent = `${formatDate(post.taken_at)} | GALLERY`;
     title.className = "bento-title";
     title.textContent = buildTitle(post);
     caption.className = "bento-caption";
@@ -215,10 +217,10 @@ function renderStreetBento(posts) {
 
     copy.append(meta, title, caption);
     link.append(image, copy);
-    streetBento.append(link);
+    galleryGrid.append(link);
   });
 
-  const streetObserver = new IntersectionObserver(
+  const galleryObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -229,44 +231,7 @@ function renderStreetBento(posts) {
     { threshold: 0.2 }
   );
 
-  streetObserver.observe(streetBento);
-}
-
-function renderTravelStories(posts) {
-  if (!travelCards) return;
-
-  travelCards.innerHTML = "";
-
-  posts.forEach((post) => {
-    const card = document.createElement("article");
-    const imageWrap = document.createElement("div");
-    const image = document.createElement("img");
-    const copy = document.createElement("div");
-    const meta = document.createElement("p");
-    const title = document.createElement("h3");
-    const caption = document.createElement("p");
-
-    card.className = "travel-card";
-
-    imageWrap.className = "travel-image-wrap";
-    image.className = "travel-image";
-    image.src = imageFor(post);
-    image.alt = post.alt || buildTitle(post);
-    image.loading = "lazy";
-    imageWrap.append(image);
-
-    meta.className = "travel-card-meta";
-    meta.textContent = post.location
-      ? `${post.location.toUpperCase()} | TRAVEL STORY`
-      : `${formatDate(post.taken_at)} | TRAVEL STORY`;
-
-    title.textContent = buildTitle(post);
-    caption.textContent = truncate(post.caption, 150);
-
-    copy.append(meta, title, caption);
-    card.append(imageWrap, copy);
-    travelCards.append(card);
-  });
+  galleryObserver.observe(galleryGrid);
 }
 
 function renderLatestStrip(posts) {
@@ -303,25 +268,16 @@ function updateHeroZoom() {
   document.documentElement.style.setProperty("--hero-scale", scale.toFixed(3));
 }
 
-function updateTravelLine() {
-  if (!travelStory || !travelLineProgress) return;
-
-  const rect = travelStory.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
-  const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / (rect.height + viewportHeight * 0.3)));
-  document.documentElement.style.setProperty("--travel-progress", `${Math.round(progress * 100)}%`);
-}
-
-function updateMountainParallax() {
-  const mountainVisual = document.querySelector(".mountain-visual");
-  if (mountainVisual) {
-    const rect = mountainVisual.getBoundingClientRect();
+function updatePortfolioParallax() {
+  const portfolioVisual = document.querySelector(".portfolio-visual");
+  if (portfolioVisual) {
+    const rect = portfolioVisual.getBoundingClientRect();
     const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight * 1.2)));
     const depth = 1 + progress * 0.08;
-    document.documentElement.style.setProperty("--mountain-depth", depth.toFixed(3));
+    document.documentElement.style.setProperty("--portfolio-depth", depth.toFixed(3));
   }
 
-  mountainStepElements.forEach((step, index) => {
+  portfolioStepElements.forEach((step, index) => {
     const rect = step.getBoundingClientRect();
     const distanceFromCenter = rect.top - window.innerHeight * 0.5;
     const offset = Math.max(-24, Math.min(24, -distanceFromCenter * 0.03));
@@ -332,7 +288,7 @@ function updateMountainParallax() {
   });
 }
 
-function updateStreetDepth() {
+function updateGalleryDepth() {
   const tiles = document.querySelectorAll(".bento-tile");
 
   tiles.forEach((tile) => {
@@ -348,26 +304,13 @@ function updateStreetDepth() {
   });
 }
 
-function updateTravelDepth() {
-  const images = document.querySelectorAll(".travel-image");
-
-  images.forEach((image) => {
-    const rect = image.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-    const scale = 1.01 + progress * 0.06;
-    image.style.setProperty("--travel-image-scale", scale.toFixed(3));
-  });
-}
-
 function runScrollEffects() {
   if (siteHeader) {
     siteHeader.classList.toggle("is-scrolled", window.scrollY > 28);
   }
   updateHeroZoom();
-  updateTravelLine();
-  updateMountainParallax();
-  updateStreetDepth();
-  updateTravelDepth();
+  updatePortfolioParallax();
+  updateGalleryDepth();
 }
 
 function finishLoader() {
@@ -517,9 +460,8 @@ function renderExperience(data) {
 
   renderProfile(data.profile || {}, data.fetched_at);
   renderHero(groups.hero);
-  renderMountainScenes(groups.mountains);
-  renderStreetBento(groups.street);
-  renderTravelStories(groups.travel);
+  renderPortfolioCards(groups.portfolio);
+  renderGalleryGrid(groups.gallery);
   renderLatestStrip(groups.latest);
   runScrollEffects();
 }
