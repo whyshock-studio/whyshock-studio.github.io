@@ -2,8 +2,6 @@ name: Update Instagram Feed
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 */2 * * *"
 
 permissions:
   contents: write
