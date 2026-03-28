@@ -1,39 +1,44 @@
 # WhyShock Studio
 
-Freelance photography portfolio and cinematic storytelling — built as a static site hosted on GitHub Pages.
+Freelance photography portfolio built as a static site on GitHub Pages.
 
-**Live site:** [whyshock-studio.github.io](https://whyshock-studio.github.io/)
+**Live site:** [studio.whyshock.com](https://studio.whyshock.com/)
 
 ## Sections
 
-- **Portfolio** — Curated featured work with scroll-driven visuals
-- **Gallery** — Grid of recent shots from the public Instagram feed
-- **Services** — Freelance photography offerings (portraits, events, product, pre-wedding, travel, reels)
-- **Latest Frames** — Film-strip layout of the newest synced images
-- **Contact** — Booking and collaboration links
+- **Gallery** – Uniform grid of recent Instagram posts with a lightbox viewer (card-flip animation, keyboard navigation)
+- **Services** – Freelance photography offerings (portraits, events, product, pre-wedding, travel, reels)
+- **Contact** – Booking and collaboration links
 
 ## Tech
 
-- Static HTML / CSS / vanilla JS — no frameworks
+- Static HTML / CSS / vanilla JS, no frameworks
 - Dark theme with responsive layout (desktop, tablet, mobile)
+- Liquid-glass navbar with `backdrop-filter` blur
+- Lightbox with `rotateY` card-flip transition and keyboard support (Escape / Arrow keys)
 - Instagram feed auto-synced via GitHub Actions (`scripts/fetch-instagram-feed.mjs`)
-- Images stored locally in `data/media/` for fast loading
+- Images cached locally in `data/media/` for fast loading
+- SEO: Open Graph, Twitter Cards, JSON-LD, sitemap, robots.txt, web manifest
 
 ## Project Structure
 
 ```
-index.html              Main page
+index.html                Main single-page site
 assets/
-  styles.css            All styles + responsive breakpoints
-  site.js               Interactivity, feed rendering, scroll effects, loader
+  styles.css              All styles + responsive breakpoints
+  site.js                 Feed rendering, lightbox, scroll effects, loader
+  og-image.png            Social sharing banner (1200×630)
 data/
-  instagram-feed.json   Synced feed data
-  instagram-feed.js     Feed data as a JS bundle for the browser
-  media/                Downloaded post images
+  instagram-feed.json     Synced feed data
+  instagram-feed.js       Feed data as a JS bundle for the browser
+  media/                  Downloaded post images
 scripts/
   fetch-instagram-feed.mjs   Node.js script to fetch and cache Instagram data
 .github/workflows/
   update-instagram-feed.yml  Scheduled GitHub Action for feed sync
+sitemap.xml               Search-engine sitemap
+robots.txt                Crawler directives
+site.webmanifest          PWA manifest
 ```
 
 ## Instagram Feed Sync

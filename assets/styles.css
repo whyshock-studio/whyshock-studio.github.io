@@ -512,29 +512,38 @@ main,
   display: inline-flex;
   gap: 0.35rem;
   padding: 0.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
   transition:
-    background 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease;
+    background 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease;
 }
 
 .site-header.is-scrolled .site-nav {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(8, 12, 18, 0.34);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .site-nav a {
   padding: 0.7rem 1rem;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
   transition:
     color 180ms ease,
     background 180ms ease,
@@ -542,8 +551,9 @@ main,
 }
 
 .site-nav a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .site-header.is-scrolled .site-nav a {
@@ -939,42 +949,63 @@ main,
 }
 
 .portfolio-step {
-  padding: 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.3rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
   transition:
-    transform 220ms ease,
-    border-color 220ms ease,
-    background 220ms ease;
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.portfolio-step:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .portfolio-step.is-active {
-  border-color: rgba(255, 198, 109, 0.42);
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateX(10px);
+  border-color: rgba(255, 198, 109, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: translateX(8px);
 }
 
 .portfolio-step-index {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 198, 109, 0.1);
   color: var(--accent-soft);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .portfolio-step h3 {
-  margin: 0.55rem 0 0;
+  margin: 0.65rem 0 0;
   font-size: var(--step-2);
-  line-height: 1.1;
+  line-height: 1.18;
   font-weight: 700;
   letter-spacing: -0.03em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .portfolio-step p {
-  margin: 0.7rem 0 0;
-  font-size: var(--step-0);
-  line-height: 1.68;
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .portfolio-step-thumb {
@@ -1018,10 +1049,12 @@ main,
 .portfolio-visual-overlay {
   position: absolute;
   inset: auto 1.25rem 1.25rem 1.25rem;
-  padding: 1rem 1.1rem;
+  padding: 1.1rem 1.25rem;
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(10, 12, 17, 0.1), rgba(10, 12, 17, 0.62));
-  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(10, 12, 17, 0.08), rgba(10, 12, 17, 0.7));
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .portfolio-main-kicker {
@@ -1048,9 +1081,14 @@ main,
 .texture-card {
   overflow: hidden;
   min-height: 8rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 200ms ease;
+}
+
+.texture-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .texture-card-large {
@@ -1070,20 +1108,21 @@ main,
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.1rem;
   margin-top: 1.5rem;
 }
 
 .bento-tile {
   position: relative;
   overflow: hidden;
-  min-height: 18rem;
+  aspect-ratio: 3 / 4;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 26px;
+  border-radius: 22px;
   background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
   opacity: 0;
-  transform: translateY(40px) scale(var(--tile-scale, 0.98));
+  transform: translateY(32px);
   transition:
     opacity 500ms ease,
     transform 500ms ease;
@@ -1092,39 +1131,32 @@ main,
 
 .gallery-grid.is-visible .bento-tile {
   opacity: 1;
-  transform: translateY(var(--tile-lift, 0px)) scale(var(--tile-scale, 1));
+  transform: translateY(0);
 }
 
-.bento-tile:nth-child(1) {
-  grid-column: span 7;
-  min-height: 26rem;
+.bento-tile:hover {
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
-.bento-tile:nth-child(2) {
-  grid-column: span 5;
-}
-
-.bento-tile:nth-child(3),
-.bento-tile:nth-child(4),
-.bento-tile:nth-child(5),
-.bento-tile:nth-child(6) {
-  grid-column: span 6;
+.bento-tile:hover .bento-image {
+  transform: scale(1.05);
 }
 
 .bento-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(var(--tile-image-scale, 1));
-  transition: transform 240ms ease;
+  transition: transform 320ms ease;
 }
 
 .bento-copy {
   position: absolute;
-  inset: auto 1rem 1rem 1rem;
-  padding: 0.95rem 1rem;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(10, 12, 17, 0.08), rgba(10, 12, 17, 0.72));
+  inset: auto 0.85rem 0.85rem 0.85rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(10, 12, 17, 0.06), rgba(10, 12, 17, 0.72));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .bento-meta {
@@ -1137,11 +1169,15 @@ main,
 }
 
 .bento-title {
-  margin: 0.45rem 0 0;
-  font-size: var(--step-2);
-  line-height: 1.1;
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.2;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .bento-caption {
@@ -1150,8 +1186,170 @@ main,
   line-height: 1.58;
 }
 
-.reel-section {
-  padding-top: 4rem;
+/* ── Lightbox ─────────────────────────────────────── */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 400ms ease,
+    background 400ms ease,
+    backdrop-filter 400ms ease;
+}
+
+.lightbox-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.lightbox-card {
+  position: relative;
+  width: min(90vw, 56rem);
+  max-height: 88vh;
+  perspective: 1200px;
+  transform: scale(0.6) rotateY(90deg);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lightbox-overlay.is-open .lightbox-card {
+  transform: scale(1) rotateY(0deg);
+}
+
+.lightbox-inner {
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #111319;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.lightbox-image {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #0d0d12;
+}
+
+.lightbox-info {
+  padding: 1.2rem 1.4rem;
+}
+
+.lightbox-meta {
+  margin: 0;
+  color: var(--accent-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lightbox-title {
+  margin: 0.4rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.lightbox-caption {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.lightbox-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -3rem;
+  right: 0;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 180ms ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 180ms ease;
+}
+
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lightbox-prev {
+  left: -4rem;
+}
+
+.lightbox-next {
+  right: -4rem;
+}
+
+@media (max-width: 760px) {
+  .lightbox-card {
+    width: 94vw;
+  }
+
+  .lightbox-prev {
+    left: 0.5rem;
+    top: auto;
+    bottom: -3.5rem;
+    transform: none;
+  }
+
+  .lightbox-next {
+    right: 0.5rem;
+    top: auto;
+    bottom: -3.5rem;
+    transform: none;
+  }
 }
 
 .feed-status {
@@ -1351,48 +1549,20 @@ main,
 }
 
 @media (max-width: 1100px) {
-  .hero-grid,
-  .portfolio-layout {
+  .hero-grid {
     grid-template-columns: 1fr;
-  }
-
-  .portfolio-stage {
-    display: none;
-  }
-
-  .portfolio-step-thumb {
-    display: block;
-  }
-
-  .portfolio-step.is-active {
-    transform: none;
   }
 
   .profile-card {
     max-width: 34rem;
   }
 
-  .gallery-grid,
-  .latest-strip {
+  .gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .bento-tile,
-  .bento-tile:nth-child(1),
-  .bento-tile:nth-child(2),
-  .bento-tile:nth-child(3),
-  .bento-tile:nth-child(4),
-  .bento-tile:nth-child(5),
-  .bento-tile:nth-child(6),
-  .film-card,
-  .film-card:nth-child(1),
-  .film-card:nth-child(2),
-  .film-card:nth-child(3) {
-    grid-column: span 1;
   }
 }
 
@@ -1457,22 +1627,32 @@ main,
   .hero-metrics,
   .contact-grid,
   .preview-grid,
-  .latest-strip,
-  .gallery-grid,
   .services-grid {
     grid-template-columns: 1fr;
   }
 
-  .portfolio-step-thumb {
-    aspect-ratio: 3 / 2;
-    border-radius: 12px;
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
   }
 
-  .portfolio-step p {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .bento-tile {
+    border-radius: 16px;
+  }
+
+  .bento-copy {
+    padding: 0.5rem 0.6rem;
+    border-radius: 12px;
+    inset: auto 0.5rem 0.5rem 0.5rem;
+  }
+
+  .bento-meta {
+    font-size: 0.6rem;
+  }
+
+  .bento-title {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 1;
   }
 }
 
@@ -1482,10 +1662,7 @@ main,
   .scroll-camera,
   .bento-tile,
   .button,
-  .hero-backdrop-image,
-  .portfolio-main-image,
-  .preview-image,
-  .film-image {
+  .hero-backdrop-image {
     animation: none !important;
     transition: none !important;
   }

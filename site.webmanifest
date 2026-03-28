@@ -1,0 +1,16 @@
+{
+  "name": "WhyShock Studio",
+  "short_name": "WhyShock",
+  "description": "Freelance photography and cinematic storytelling — portraits, events, product shoots, and visual stories.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d12",
+  "theme_color": "#0d0d12",
+  "icons": [
+    {
+      "src": "assets/whyshock-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

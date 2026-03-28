@@ -6,16 +6,67 @@
     <title>WhyShock Studio | Photography and Cinematic Stories</title>
     <meta
       name="description"
-      content="WhyShock Studio — freelance photography and cinematic storytelling. Available for portraits, events, product shoots, and more."
+      content="WhyShock Studio. Freelance photography and cinematic storytelling. Available for portraits, events, product shoots, and more."
     />
     <meta property="og:title" content="WhyShock Studio" />
     <meta
       property="og:description"
-      content="Freelance photography and cinematic storytelling — portraits, events, product shoots, and visual stories."
+      content="Freelance photography and cinematic storytelling. Portraits, events, product shoots, and visual stories."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://whyshock-studio.github.io/" />
+    <meta property="og:url" content="https://studio.whyshock.com/" />
+    <meta property="og:image" content="https://studio.whyshock.com/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="WhyShock Studio" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WhyShock Studio | Photography and Cinematic Stories" />
+    <meta name="twitter:description" content="Freelance photography and cinematic storytelling. Portraits, events, product shoots, and visual stories." />
+    <meta name="twitter:image" content="https://studio.whyshock.com/assets/og-image.png" />
+
+    <link rel="canonical" href="https://studio.whyshock.com/" />
     <meta name="theme-color" content="#0d0d12" />
+    <meta name="author" content="WhyShock Studio" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="icon" href="assets/whyshock-logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/whyshock-logo.png" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "WhyShock Studio",
+      "url": "https://studio.whyshock.com/",
+      "logo": "https://studio.whyshock.com/assets/whyshock-logo.png",
+      "image": "https://studio.whyshock.com/assets/whyshock-logo.png",
+      "description": "Freelance photography and cinematic storytelling. Available for portraits, events, product shoots, pre-weddings, and more.",
+      "email": "i@whyshock.com",
+      "sameAs": [
+        "https://www.instagram.com/whyshock.studio/"
+      ],
+      "priceRange": "$$",
+      "serviceType": [
+        "Portrait Photography",
+        "Event Photography",
+        "Product Photography",
+        "Pre-wedding Photography",
+        "Travel & Landscape Photography",
+        "Cinematic Reels & Video"
+      ],
+      "knowsAbout": [
+        "Photography",
+        "Cinematic Storytelling",
+        "Portrait Photography",
+        "Event Photography",
+        "Product Photography"
+      ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -53,6 +104,25 @@
     <div class="page-noise" aria-hidden="true"></div>
     <div class="flash-wash" id="flash-wash" aria-hidden="true"></div>
 
+    <div class="lightbox-overlay" id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer" onclick="if(event.target===this)closeLightbox()">
+      <div class="lightbox-card">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&#10005; Close</button>
+        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Previous">&#8249;</button>
+        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)" aria-label="Next">&#8250;</button>
+        <div class="lightbox-inner">
+          <img class="lightbox-image" alt="" />
+          <div class="lightbox-info">
+            <p class="lightbox-meta"></p>
+            <h3 class="lightbox-title"></h3>
+            <p class="lightbox-caption"></p>
+            <div class="lightbox-actions">
+              <a class="lightbox-link button button-tertiary" target="_blank" rel="noreferrer">View on Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="scroll-camera" id="scroll-camera" aria-hidden="true">
       <div class="scroll-camera-rig">
         <div class="scroll-camera-top"></div>
@@ -81,7 +151,6 @@
       </a>
 
       <nav class="site-nav" aria-label="Primary">
-        <a href="#portfolio">Portfolio</a>
         <a href="#gallery">Gallery</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
@@ -107,14 +176,13 @@
           <div class="hero-grid">
             <div class="hero-copy">
               <p class="eyebrow">whyshock.studio</p>
-              <h1 id="hero-title">The World, Unfiltered.</h1>
+              <h1 id="hero-title">Frames That Shock.</h1>
               <p class="hero-text">
-                A photography portfolio showcasing cinematic storytelling, freelance event shoots, and
-                the latest public work from
-                <a href="https://www.instagram.com/whyshock.studio/" target="_blank" rel="noreferrer">
+                Cinematic photography by
+                <a href="https://www.instagram.com/whyshock.studio/" target="blank" rel="noreferrer">
                   @whyshock.studio
-                </a>
-                — available for bookings.
+                </a>.
+                Portraits, events, products, and everything in between. Now accepting bookings.
               </p>
 
               <div class="hero-tags" aria-label="Studio focus areas">
@@ -169,7 +237,7 @@
                   </div>
                 </div>
                 <p id="profile-bio" class="profile-bio">
-                  Reels, photography, travel, portraits, and cinematic moments.
+                  Photography, reels, and cinematic stories.
                 </p>
                 <div class="profile-actions">
                   <a
@@ -189,68 +257,31 @@
         </div>
       </section>
 
-      <section id="portfolio" class="scene-section portfolio-section">
-        <div class="section-heading">
-          <p class="eyebrow">Portfolio</p>
-          <h2>Featured Work</h2>
-          <p class="section-meta">CURATED SHOTS | CINEMATIC SEQUENCE | VISUAL STORIES</p>
-          <p>
-            A curated selection of recent work — landscapes, portraits, and cinematic frames
-            pulled from the latest public shoots.
-          </p>
-        </div>
-
-        <div class="portfolio-layout">
-          <div id="portfolio-steps" class="portfolio-steps"></div>
-
-          <div class="portfolio-stage">
-            <div class="portfolio-stage-sticky">
-              <div class="portfolio-visual">
-                <img id="portfolio-main-image" class="portfolio-main-image" alt="Featured portfolio shot" />
-                <div class="portfolio-visual-overlay">
-                  <p id="portfolio-main-kicker" class="portfolio-main-kicker"></p>
-                  <h3 id="portfolio-main-title" class="portfolio-main-title"></h3>
-                </div>
-              </div>
-
-              <div class="texture-strip">
-                <div class="texture-card texture-card-large">
-                  <img id="texture-image-1" alt="Portfolio detail one" />
-                </div>
-                <div class="texture-card">
-                  <img id="texture-image-2" alt="Portfolio detail two" />
-                </div>
-                <div class="texture-card">
-                  <img id="texture-image-3" alt="Portfolio detail three" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="gallery" class="scene-section gallery-section">
         <div class="section-heading">
           <p class="eyebrow">Gallery</p>
-          <h2>Visual Grid</h2>
-          <p class="section-meta">RECENT WORK | PHOTO GRID | PUBLIC ARCHIVE</p>
+          <h2>The Work</h2>
+          <p class="section-meta">CURATED WORK | RECENT SHOOTS | VISUAL STORIES</p>
           <p>
-            A grid of recent shots sliding into view — capturing moments across landscapes,
-            people, and everyday scenes.
+            The latest work. Portraits, landscapes, street scenes, and cinematic frames,
+            pulled straight from the feed.
           </p>
         </div>
 
+        <div id="feed-status" class="feed-status" role="status" aria-live="polite">
+          Loading gallery...
+        </div>
         <div id="gallery-grid" class="gallery-grid"></div>
       </section>
 
       <section id="services" class="scene-section services-section">
         <div class="section-heading">
           <p class="eyebrow">Services</p>
-          <h2>Freelance Photography</h2>
-          <p class="section-meta">BOOKINGS OPEN | FREELANCE | EVENTS &amp; SESSIONS</p>
+          <h2>What We Shoot</h2>
+          <p class="section-meta">ACCEPTING BOOKINGS | FREELANCE SESSIONS | EVENTS &amp; BRANDS</p>
           <p>
-            Available for freelance photography — from personal portraits to commercial product shoots.
-            Every session is treated like a cinematic story.
+            From intimate portraits to large-scale event coverage, every project is
+            approached with a cinematic eye and meticulous attention to detail.
           </p>
         </div>
 
@@ -263,7 +294,7 @@
           <div class="service-card">
             <div class="service-icon">&#128118;</div>
             <h3>Child &amp; Family</h3>
-            <p>Natural, candid moments — birthdays, milestones, and family portraits with a warm, cinematic feel.</p>
+            <p>Natural, candid moments. Birthdays, milestones, and family portraits with a warm, cinematic feel.</p>
           </div>
           <div class="service-card">
             <div class="service-icon">&#127873;</div>
@@ -278,7 +309,7 @@
           <div class="service-card">
             <div class="service-icon">&#127961;</div>
             <h3>Travel &amp; Landscape</h3>
-            <p>Adventure and travel photography — mountains, cities, and everything in between, captured on location.</p>
+            <p>Adventure and travel photography. Mountains, cities, and everything in between, captured on location.</p>
           </div>
           <div class="service-card">
             <div class="service-icon">&#127909;</div>
@@ -288,7 +319,7 @@
         </div>
 
         <div class="services-cta">
-          <p>Interested in working together? Let's create something memorable.</p>
+          <p>Ready to create something worth remembering?</p>
           <div class="contact-actions">
             <a class="button button-primary" href="mailto:i@whyshock.com">Get a Quote</a>
             <a
@@ -303,30 +334,14 @@
         </div>
       </section>
 
-      <section id="latest" class="scene-section reel-section">
-        <div class="section-heading">
-          <p class="eyebrow">Latest Reel</p>
-          <h2>Latest Frames</h2>
-          <p class="section-meta">FILM STRIP | PUBLIC ARCHIVE | RECENT SYNC</p>
-          <p>
-            The freshest images from the synced public feed, laid out like a modern contact strip.
-          </p>
-        </div>
-
-        <div id="feed-status" class="feed-status" role="status" aria-live="polite">
-          Loading the latest gallery...
-        </div>
-        <div id="latest-strip" class="latest-strip"></div>
-      </section>
-
       <section id="contact" class="scene-section contact-section">
         <div class="section-heading">
           <p class="eyebrow">Contact</p>
-          <h2>Book a Shoot</h2>
-          <p class="section-meta">BOOKINGS | COLLABORATIONS | CINEMATIC COMMISSIONS</p>
+          <h2>Let's Work Together</h2>
+          <p class="section-meta">INQUIRIES | COLLABORATIONS | BOOKINGS</p>
           <p>
-            Reach out for bookings, collaborations, brand visuals, pre-weddings, and travel-driven
-            storytelling.
+            Have a project in mind? Whether it's a brand campaign, a personal shoot, or a
+            cinematic collaboration, reach out and let's make it happen.
           </p>
         </div>
 
@@ -366,20 +381,6 @@
       <p>WhyShock Studio</p>
       <p>Freelance photography &amp; cinematic storytelling. Available for bookings.</p>
     </footer>
-
-    <template id="film-card-template">
-      <article class="film-card">
-        <a class="film-link" target="_blank" rel="noreferrer">
-          <div class="film-image-wrap">
-            <img class="film-image" loading="lazy" alt="" />
-          </div>
-          <div class="film-copy">
-            <p class="film-meta"></p>
-            <h3 class="film-title"></h3>
-          </div>
-        </a>
-      </article>
-    </template>
 
     <script src="data/instagram-feed.js"></script>
     <script src="assets/site.js" defer></script>

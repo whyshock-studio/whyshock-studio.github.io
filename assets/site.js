@@ -1,15 +1,5 @@
 const galleryGrid = document.querySelector("#gallery-grid");
-const latestStrip = document.querySelector("#latest-strip");
 const feedStatus = document.querySelector("#feed-status");
-const filmCardTemplate = document.querySelector("#film-card-template");
-
-const portfolioSteps = document.querySelector("#portfolio-steps");
-const portfolioMainImage = document.querySelector("#portfolio-main-image");
-const portfolioMainKicker = document.querySelector("#portfolio-main-kicker");
-const portfolioMainTitle = document.querySelector("#portfolio-main-title");
-const textureImage1 = document.querySelector("#texture-image-1");
-const textureImage2 = document.querySelector("#texture-image-2");
-const textureImage3 = document.querySelector("#texture-image-3");
 
 const heroBackdropImage = document.querySelector("#hero-backdrop-image");
 const siteHeader = document.querySelector(".site-header");
@@ -20,8 +10,6 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 
 const numberFormatter = new Intl.NumberFormat("en", { notation: "compact" });
 
-let portfolioStepElements = [];
-let currentPortfolioIndex = 0;
 let cameraCueCooldownUntil = 0;
 let cameraCueTimers = [];
 let flashWashTimer = null;
@@ -53,15 +41,24 @@ function formatDate(value) {
   }).format(date);
 }
 
+function stripHashtags(text) {
+  if (!text) return "";
+  return text.replace(/#[\w.]+/g, "").replace(/\s{2,}/g, " ").trim();
+}
+
 function truncate(text, length = 150) {
   if (!text) return "Open the post on Instagram to see more.";
-  const clean = text.replace(/\s+/g, " ").trim();
+  const clean = stripHashtags(text).replace(/\s+/g, " ").trim();
+  if (!clean) return "Open the post on Instagram to see more.";
   return clean.length > length ? `${clean.slice(0, length - 3)}...` : clean;
 }
 
 function buildTitle(post) {
   if (post.location) return post.location;
-  if (post.caption) return post.caption.split("\n")[0].slice(0, 72);
+  if (post.caption) {
+    const firstLine = stripHashtags(post.caption.split("\n")[0]).slice(0, 72);
+    if (firstLine) return firstLine;
+  }
   return "Instagram post";
 }
 
@@ -70,14 +67,10 @@ function imageFor(post) {
 }
 
 function selectPostGroups(posts) {
-  const remainingPosts = Array.isArray(posts) ? [...posts] : [];
-  const take = (count) => remainingPosts.splice(0, Math.min(count, remainingPosts.length));
-
+  const all = Array.isArray(posts) ? [...posts] : [];
   return {
-    hero: take(1)[0] || null,
-    portfolio: take(3),
-    gallery: take(3),
-    latest: take(remainingPosts.length),
+    hero: all.shift() || null,
+    gallery: all.slice(0, 12),
   };
 }
 
@@ -107,80 +100,54 @@ function renderHero(post) {
   heroBackdropImage.alt = post.alt || buildTitle(post);
 }
 
-function updatePortfolioVisual(posts, index) {
-  if (!posts.length) return;
+let lightboxPosts = [];
+let lightboxIndex = 0;
 
-  currentPortfolioIndex = index;
-  const active = posts[index];
-  const next = posts[(index + 1) % posts.length];
-  const nextTwo = posts[(index + 2) % posts.length];
+function openLightbox(posts, index) {
+  lightboxPosts = posts;
+  lightboxIndex = index;
 
-  portfolioMainImage.src = imageFor(active);
-  portfolioMainImage.alt = active.alt || buildTitle(active);
-  portfolioMainKicker.textContent = `${formatDate(active.taken_at)} | PUBLIC ARCHIVE | ${active.type || "PHOTO"}`;
-  portfolioMainTitle.textContent = buildTitle(active);
+  const overlay = document.querySelector("#lightbox-overlay");
+  if (!overlay) return;
 
-  textureImage1.src = imageFor(active);
-  textureImage2.src = imageFor(next);
-  textureImage3.src = imageFor(nextTwo);
-
-  portfolioStepElements.forEach((step, stepIndex) => {
-    step.classList.toggle("is-active", stepIndex === index);
-  });
+  updateLightboxContent(posts[index]);
+  overlay.classList.add("is-open");
+  document.body.style.overflow = "hidden";
 }
 
-function renderPortfolioCards(posts) {
-  if (!portfolioSteps || !posts.length) return;
+function closeLightbox() {
+  const overlay = document.querySelector("#lightbox-overlay");
+  if (!overlay) return;
 
-  portfolioSteps.innerHTML = "";
+  overlay.classList.remove("is-open");
+  document.body.style.overflow = "";
+}
 
-  posts.forEach((post, index) => {
-    const card = document.createElement("article");
-    const thumb = document.createElement("img");
-    const rect = document.createElement("div");
-    const title = document.createElement("h3");
-    const copy = document.createElement("p");
+function navigateLightbox(direction) {
+  if (!lightboxPosts.length) return;
+  lightboxIndex = (lightboxIndex + direction + lightboxPosts.length) % lightboxPosts.length;
+  updateLightboxContent(lightboxPosts[lightboxIndex]);
+}
 
-    card.className = "portfolio-step";
-    card.dataset.index = String(index);
+function updateLightboxContent(post) {
+  const overlay = document.querySelector("#lightbox-overlay");
+  if (!overlay) return;
 
-    thumb.className = "portfolio-step-thumb";
-    thumb.src = imageFor(post);
-    thumb.alt = post.alt || buildTitle(post);
-    thumb.loading = "lazy";
+  const img = overlay.querySelector(".lightbox-image");
+  const meta = overlay.querySelector(".lightbox-meta");
+  const title = overlay.querySelector(".lightbox-title");
+  const caption = overlay.querySelector(".lightbox-caption");
+  const link = overlay.querySelector(".lightbox-link");
 
-    rect.className = "portfolio-step-index";
-    rect.textContent = `Shot 0${index + 1}`;
+  img.src = imageFor(post);
+  img.alt = post.alt || buildTitle(post);
+  meta.textContent = `${formatDate(post.taken_at)} | ${(post.type || "Photo").toUpperCase()}`;
+  title.textContent = buildTitle(post);
+  caption.textContent = truncate(post.caption, 240);
 
-    title.textContent = buildTitle(post);
-    copy.textContent = truncate(post.caption, 170);
-
-    card.append(thumb, rect, title, copy);
-    portfolioSteps.append(card);
-  });
-
-  portfolioStepElements = Array.from(portfolioSteps.querySelectorAll(".portfolio-step"));
-
-  portfolioStepElements.forEach((step, index) => {
-    step.addEventListener("mouseenter", () => updatePortfolioVisual(posts, index));
-    step.addEventListener("click", () => updatePortfolioVisual(posts, index));
-  });
-
-  updatePortfolioVisual(posts, 0);
-
-  const portfolioObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = Number(entry.target.dataset.index || 0);
-          updatePortfolioVisual(posts, index);
-        }
-      });
-    },
-    { threshold: 0.6 }
-  );
-
-  portfolioStepElements.forEach((step) => portfolioObserver.observe(step));
+  if (link) {
+    link.href = post.permalink;
+  }
 }
 
 function renderGalleryGrid(posts) {
@@ -189,18 +156,15 @@ function renderGalleryGrid(posts) {
   galleryGrid.innerHTML = "";
 
   posts.forEach((post, index) => {
-    const link = document.createElement("a");
+    const tile = document.createElement("div");
     const image = document.createElement("img");
     const copy = document.createElement("div");
     const meta = document.createElement("p");
     const title = document.createElement("h3");
-    const caption = document.createElement("p");
 
-    link.className = "bento-tile";
-    link.href = post.permalink;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.style.setProperty("--delay", `${index * 90}ms`);
+    tile.className = "bento-tile";
+    tile.style.setProperty("--delay", `${index * 60}ms`);
+    tile.addEventListener("click", () => openLightbox(posts, index));
 
     image.className = "bento-image";
     image.src = imageFor(post);
@@ -209,16 +173,18 @@ function renderGalleryGrid(posts) {
 
     copy.className = "bento-copy";
     meta.className = "bento-meta";
-    meta.textContent = `${formatDate(post.taken_at)} | GALLERY`;
+    meta.textContent = `${formatDate(post.taken_at)} | ${(post.type || "Photo").toUpperCase()}`;
     title.className = "bento-title";
     title.textContent = buildTitle(post);
-    caption.className = "bento-caption";
-    caption.textContent = truncate(post.caption, 120);
 
-    copy.append(meta, title, caption);
-    link.append(image, copy);
-    galleryGrid.append(link);
+    copy.append(meta, title);
+    tile.append(image, copy);
+    galleryGrid.append(tile);
   });
+
+  if (feedStatus) {
+    feedStatus.textContent = `${posts.length} recent posts from @whyshock.studio`;
+  }
 
   const galleryObserver = new IntersectionObserver(
     (entries) => {
@@ -228,34 +194,10 @@ function renderGalleryGrid(posts) {
         }
       });
     },
-    { threshold: 0.2 }
+    { threshold: 0.15 }
   );
 
   galleryObserver.observe(galleryGrid);
-}
-
-function renderLatestStrip(posts) {
-  if (!latestStrip || !filmCardTemplate) return;
-
-  latestStrip.innerHTML = "";
-
-  posts.forEach((post) => {
-    const fragment = filmCardTemplate.content.cloneNode(true);
-    const link = fragment.querySelector(".film-link");
-    const image = fragment.querySelector(".film-image");
-    const meta = fragment.querySelector(".film-meta");
-    const title = fragment.querySelector(".film-title");
-
-    link.href = post.permalink;
-    image.src = imageFor(post);
-    image.alt = post.alt || buildTitle(post);
-    meta.textContent = `PUBLIC FEED | ${formatDate(post.taken_at)}`;
-    title.textContent = buildTitle(post);
-
-    latestStrip.append(fragment);
-  });
-
-  feedStatus.textContent = `Showing ${posts.length} recent posts from the synced public feed.`;
 }
 
 function updateHeroZoom() {
@@ -268,49 +210,11 @@ function updateHeroZoom() {
   document.documentElement.style.setProperty("--hero-scale", scale.toFixed(3));
 }
 
-function updatePortfolioParallax() {
-  const portfolioVisual = document.querySelector(".portfolio-visual");
-  if (portfolioVisual) {
-    const rect = portfolioVisual.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight * 1.2)));
-    const depth = 1 + progress * 0.08;
-    document.documentElement.style.setProperty("--portfolio-depth", depth.toFixed(3));
-  }
-
-  portfolioStepElements.forEach((step, index) => {
-    const rect = step.getBoundingClientRect();
-    const distanceFromCenter = rect.top - window.innerHeight * 0.5;
-    const offset = Math.max(-24, Math.min(24, -distanceFromCenter * 0.03));
-    step.style.transform = step.classList.contains("is-active")
-      ? `translateX(10px) translateY(${offset}px)`
-      : `translateY(${offset}px)`;
-    step.style.transition = "transform 220ms ease, border-color 220ms ease, background 220ms ease";
-  });
-}
-
-function updateGalleryDepth() {
-  const tiles = document.querySelectorAll(".bento-tile");
-
-  tiles.forEach((tile) => {
-    const rect = tile.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-    const lift = (0.5 - progress) * 28;
-    const scale = 0.985 + progress * 0.04;
-    const imageScale = 1.02 + progress * 0.06;
-
-    tile.style.setProperty("--tile-lift", `${lift.toFixed(2)}px`);
-    tile.style.setProperty("--tile-scale", scale.toFixed(3));
-    tile.style.setProperty("--tile-image-scale", imageScale.toFixed(3));
-  });
-}
-
 function runScrollEffects() {
   if (siteHeader) {
     siteHeader.classList.toggle("is-scrolled", window.scrollY > 28);
   }
   updateHeroZoom();
-  updatePortfolioParallax();
-  updateGalleryDepth();
 }
 
 function finishLoader() {
@@ -460,9 +364,7 @@ function renderExperience(data) {
 
   renderProfile(data.profile || {}, data.fetched_at);
   renderHero(groups.hero);
-  renderPortfolioCards(groups.portfolio);
   renderGalleryGrid(groups.gallery);
-  renderLatestStrip(groups.latest);
   runScrollEffects();
 }
 
@@ -471,7 +373,6 @@ async function loadFeed() {
 
   if (window.location.protocol === "file:" && bundledFeed) {
     renderExperience(bundledFeed);
-    feedStatus.textContent = "Showing the bundled local feed preview.";
     return;
   }
 
@@ -488,17 +389,26 @@ async function loadFeed() {
 
     if (bundledFeed) {
       renderExperience(bundledFeed);
-      feedStatus.textContent = "Showing the bundled backup feed.";
+      feedStatus.textContent = "Loaded from backup feed.";
       return;
     }
 
     feedStatus.textContent =
-      "The gallery feed could not be loaded right now. You can still browse the Instagram profile directly.";
+      "Could not load the gallery. Visit the Instagram profile to see the latest work.";
   }
 }
 
 window.addEventListener("scroll", runScrollEffects, { passive: true });
 window.addEventListener("resize", runScrollEffects);
+
+window.addEventListener("keydown", (e) => {
+  const overlay = document.querySelector("#lightbox-overlay");
+  if (!overlay || !overlay.classList.contains("is-open")) return;
+
+  if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowRight") navigateLightbox(1);
+  if (e.key === "ArrowLeft") navigateLightbox(-1);
+});
 
 initCameraLoader();
 initCameraCue();
