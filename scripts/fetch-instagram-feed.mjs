@@ -26,21 +26,45 @@ function normalizeType(typename) {
   return map[typename] || "Post";
 }
 
-async function fetchProfile() {
-  const response = await fetch(PROFILE_URL, {
-    headers: {
-      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-      "x-ig-app-id": "936619743392459",
-      accept: "application/json",
-      referer: `https://www.instagram.com/${USERNAME}/`,
-    },
-  });
+const USER_AGENTS = [
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+];
 
-  if (!response.ok) {
-    throw new Error(`Instagram request failed with status ${response.status}`);
+async function fetchProfile() {
+  let lastError;
+
+  for (const ua of USER_AGENTS) {
+    try {
+      const response = await fetch(PROFILE_URL, {
+        headers: {
+          "user-agent": ua,
+          "x-ig-app-id": "936619743392459",
+          accept: "*/*",
+          "accept-language": "en-US,en;q=0.9",
+          "sec-fetch-site": "same-origin",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-dest": "empty",
+          referer: `https://www.instagram.com/${USERNAME}/`,
+        },
+      });
+
+      if (!response.ok) {
+        const body = await response.text().catch(() => "");
+        console.error(`Attempt failed (status ${response.status}): ${body.slice(0, 200)}`);
+        lastError = new Error(`Instagram request failed with status ${response.status}`);
+        continue;
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error(`Attempt failed: ${err.message}`);
+      lastError = err;
+    }
   }
 
-  return response.json();
+  throw lastError;
 }
 
 async function downloadImage(url, outputPath) {
